@@ -111,7 +111,13 @@ const TypingTest = () => {
           )}
 
           {results && (
-            <ResultsDisplay results={results} onRestart={startTest} />
+            <ResultsDisplay
+              results={results}
+              onTryAgain={() => {
+                setIsTestActive(true);
+                startTest();
+              }}
+            />
           )}
         </CardContent>
       </Card>

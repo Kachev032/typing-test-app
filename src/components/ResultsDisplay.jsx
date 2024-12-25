@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 
-const ResultsDisplay = ({ results }) => {
+const ResultsDisplay = ({ results, onTryAgain }) => {
   return (
     <div className="mt-4">
       <h2 className="text-2xl font-bold mb-4">Results</h2>
@@ -18,7 +18,13 @@ const ResultsDisplay = ({ results }) => {
           <p className="text-2xl">{results.time}</p>
         </div>
       </div>
-      <Button onClick={() => window.location.reload()}>Play Again</Button>
+      <Button
+        onClick={() => {
+          onTryAgain();
+        }}
+      >
+        Play Again
+      </Button>
     </div>
   );
 };
