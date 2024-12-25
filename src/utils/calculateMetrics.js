@@ -1,4 +1,4 @@
-export const calcualteAccuracy = (originalText, typedText) => {
+export const calculateAccuracy = (originalText, typedText) => {
   let correctChars = 0;
   const minLength = Math.min(originalText.length, typedText.length);
 
