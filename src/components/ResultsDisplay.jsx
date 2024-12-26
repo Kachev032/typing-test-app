@@ -23,7 +23,7 @@ const ResultsDisplay = ({ results, onTryAgain }) => {
           onTryAgain();
         }}
       >
-        Play Again
+        Restart Test
       </Button>
     </div>
   );

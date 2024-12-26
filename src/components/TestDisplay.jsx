@@ -8,7 +8,7 @@ const TestDisplay = ({ text, activeCharIndex, userInput }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div className="flex items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="max-w-[850px] px-8">
         <div className="text-2xl font-mono leading-relaxed tracking-wide break-words text-center">
           {text.split("").map((char, index) => {
@@ -21,7 +21,7 @@ const TestDisplay = ({ text, activeCharIndex, userInput }) => {
                     ? "text-green-600"
                     : status === "incorrect"
                     ? "text-red-600"
-                    : "text-gray-400ww"
+                    : "text-gray-600"
                 } transition-colors duration-200`}
               >
                 {char}
