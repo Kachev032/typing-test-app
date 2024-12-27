@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { getRandomText } from "@/utils/textGenerator";
 import { calculateAccuracy, calculateWPM } from "@/utils/calculateMetrics";
 
@@ -85,22 +84,13 @@ const TypingTest = () => {
   }, [startTime, currentText, activeCharIndex, lastKeyTimes, results]);
 
   return (
-    <div className="max-w-2xl mx-auto p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>Typing Speed Test</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <TestDisplay
-            text={currentText}
-            activeCharIndex={activeCharIndex}
-            userInput={userInput}
-          />
-          {results && (
-            <ResultsDisplay results={results} onTryAgain={resetTest} />
-          )}
-        </CardContent>
-      </Card>
+    <div className="h-[calc(100vh-40px)] flex flex-col items-center justify-center p-4">
+      <TestDisplay
+        text={currentText}
+        activeCharIndex={activeCharIndex}
+        userInput={userInput}
+      />
+      {results && <ResultsDisplay results={results} onTryAgain={resetTest} />}
     </div>
   );
 };

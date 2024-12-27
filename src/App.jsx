@@ -3,7 +3,7 @@ import ThemeToggle from "./components/ThemeToggle";
 
 function App() {
   return (
-    <div className="App">
+    <div className="h-screen overflow-hidden">
       <ThemeToggle />
       <TypingTest />
     </div>

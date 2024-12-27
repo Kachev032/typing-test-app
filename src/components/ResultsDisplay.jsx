@@ -2,29 +2,25 @@ import { Button } from "./ui/button";
 
 const ResultsDisplay = ({ results, onTryAgain }) => {
   return (
-    <div className="mt-4">
-      <h2 className="text-2xl font-bold mb-4">Results</h2>
-      <div className="grid grid-cols-3 gap-4">
-        <div>
-          <p className="font-semibold">WPM</p>
-          <p className="text-2xl">{results.wpm}</p>
+    <div className="mt-8 w-full max-w-[850px] px-8">
+      <h2 className="text-2xl font-bold mb-6 text-center">Results</h2>
+      <div className="grid grid-cols-3 gap-8 mb-8">
+        <div className="flex flex-col items-center">
+          <p className="font-semibold text-lg mb-2">WPM</p>
+          <p className="text-3xl font-mono">{results.wpm}</p>
         </div>
-        <div>
-          <p className="font-semibold">Accuracy</p>
-          <p className="text-2xl">{results.accuracy}%</p>
+        <div className="flex flex-col items-center">
+          <p className="font-semibold text-lg mb-2">Accuracy</p>
+          <p className="text-3xl font-mono">{results.accuracy}%</p>
         </div>
-        <div>
-          <p className="font-semibold">Time</p>
-          <p className="text-2xl">{results.time}</p>
+        <div className="flex flex-col items-center">
+          <p className="font-semibold text-lg mb-2">Time</p>
+          <p className="text-3xl font-mono">{results.time}s</p>
         </div>
       </div>
-      <Button
-        onClick={() => {
-          onTryAgain();
-        }}
-      >
-        Restart Test
-      </Button>
+      <div className="flex justify-center">
+        <Button onClick={onTryAgain}>Restart</Button>
+      </div>
     </div>
   );
 };
