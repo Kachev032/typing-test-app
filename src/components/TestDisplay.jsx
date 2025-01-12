@@ -14,17 +14,23 @@ const TestDisplay = ({ text, activeCharIndex, userInput }) => {
           {text.split("").map((char, index) => {
             const status = getCharStatus(index);
             return (
-              <span
-                key={index}
-                className={`${
-                  status === "correct"
-                    ? "text-green-600"
-                    : status === "incorrect"
-                    ? "text-red-600"
-                    : "text-gray-600"
-                } transition-colors duration-200`}
-              >
-                {char}
+              <span key={index} className="relative inline-block">
+                <span
+                  className={`${
+                    status === "correct"
+                      ? "text-green-600"
+                      : status === "incorrect"
+                      ? "text-red-600"
+                      : "text-gray-600"
+                  } transition-colors duration-200`}
+                >
+                  {char === " " ? "\u00A0" : char}
+                </span>
+                {index === activeCharIndex && (
+                  <span className="absolute left-0 right-0 bottom-0 text-blue-600">
+                    _
+                  </span>
+                )}
               </span>
             );
           })}
