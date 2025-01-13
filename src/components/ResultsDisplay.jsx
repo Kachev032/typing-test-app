@@ -1,4 +1,5 @@
 import { Button } from "./ui/button";
+import { RotateCcw } from "lucide-react";
 
 const ResultsDisplay = ({ results, onTryAgain }) => {
   return (
@@ -19,7 +20,9 @@ const ResultsDisplay = ({ results, onTryAgain }) => {
         </div>
       </div>
       <div className="flex justify-center">
-        <Button onClick={onTryAgain}>Restart</Button>
+        <Button onClick={onTryAgain} variant="ghost" size="icon">
+          {<RotateCcw className="w-6 h-6" />}
+        </Button>
       </div>
     </div>
   );
