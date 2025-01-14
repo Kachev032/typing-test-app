@@ -15,7 +15,7 @@ const Footer = () => {
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" asChild>
               <a
-                href="https://github.com/yourusername/yourrepo"
+                href="https://github.com/Kachev032/typing-test-app"
                 target="_blank"
                 rel="noopener noreferrer"
               >

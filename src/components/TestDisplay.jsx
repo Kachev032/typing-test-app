@@ -8,7 +8,7 @@ const TestDisplay = ({ text, activeCharIndex, userInput }) => {
   };
 
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex flex-col items-center justify-center">
       <div className="max-w-[1350px] px-10">
         <div className="text-2xl font-mono leading-relaxed tracking-wide break-words text-center">
           {text.split("").map((char, index) => {

@@ -1,29 +1,46 @@
-import { useState, useEffect } from "react";
-import { getRandomText } from "@/utils/textGenerator";
+import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setUserInput,
+  setStartTime,
+  setActiveCharIndex,
+  updateLastKeyTimes,
+  setResults,
+  resetTest,
+  setTabPressed,
+} from "@/store/slices/typingSlice";
 import { calculateAccuracy, calculateWPM } from "@/utils/calculateMetrics";
-
 import TestDisplay from "./TestDisplay";
 import ResultsDisplay from "./ResultsDisplay";
 
 const TypingTest = () => {
-  const [currentText, setCurrentText] = useState(getRandomText());
-  const [userInput, setUserInput] = useState("");
-  const [startTime, setStartTime] = useState(null);
-  const [results, setResults] = useState(null);
-  const [activeCharIndex, setActiveCharIndex] = useState(0);
-  const [lastKeyTimes, setLastKeyTimes] = useState({});
+  const dispatch = useDispatch();
+  const {
+    currentText,
+    userInput,
+    startTime,
+    results,
+    activeCharIndex,
+    lastKeyTimes,
+    isTabPressed,
+  } = useSelector((state) => state.typing);
 
   const handleKeyDown = (e) => {
-    if (results) return;
-
-    if (e.key === "Tab" || e.key === "Enter") {
+    if (e.key === "Tab") {
       e.preventDefault();
+      dispatch(setTabPressed(true));
+      return;
+    }
+
+    if (e.key === "Enter" && isTabPressed) {
+      e.preventDefault();
+      dispatch(resetTest());
       return;
     }
 
     // Start timer on first keystroke
     if (!startTime && e.key.length === 1) {
-      setStartTime(Date.now());
+      dispatch(setStartTime(Date.now()));
     }
 
     const currentTime = Date.now();
@@ -34,26 +51,34 @@ const TypingTest = () => {
       return;
     }
 
-    setLastKeyTimes((prev) => ({
-      ...prev,
-      [e.key]: currentTime,
-    }));
+    dispatch(
+      updateLastKeyTimes({
+        key: e.key,
+        time: currentTime,
+      })
+    );
 
     if (e.key === "Backspace") {
       if (activeCharIndex > 0) {
-        setUserInput((prev) => prev.slice(0, -1));
-        setActiveCharIndex((prev) => prev - 1);
+        dispatch(setUserInput(userInput.slice(0, -1)));
+        dispatch(setActiveCharIndex(activeCharIndex - 1));
       }
       return;
     }
 
     if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      setUserInput((prev) => prev + e.key);
-      setActiveCharIndex((prev) => prev + 1);
+      dispatch(setUserInput(userInput + e.key));
+      dispatch(setActiveCharIndex(activeCharIndex + 1));
 
       if (activeCharIndex + 1 === currentText.length) {
         completeTest();
       }
+    }
+  };
+
+  const handleKeyUp = (e) => {
+    if (e.key === "Tab") {
+      dispatch(setTabPressed(false));
     }
   };
 
@@ -66,22 +91,25 @@ const TypingTest = () => {
       time: ((endTime - startTime) / 1000).toFixed(2),
     };
 
-    setResults(results);
-  };
-
-  const resetTest = () => {
-    setCurrentText(getRandomText());
-    setUserInput("");
-    setStartTime(null);
-    setResults(null);
-    setActiveCharIndex(0);
-    setLastKeyTimes({});
+    dispatch(setResults(results));
   };
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [startTime, currentText, activeCharIndex, lastKeyTimes, results]);
+    window.addEventListener("keyup", handleKeyUp);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+    };
+  }, [
+    startTime,
+    currentText,
+    activeCharIndex,
+    lastKeyTimes,
+    results,
+    userInput,
+    isTabPressed,
+  ]);
 
   return (
     <div className="h-[calc(100vh-40px)] flex flex-col items-center justify-center p-4">
@@ -90,7 +118,12 @@ const TypingTest = () => {
         activeCharIndex={activeCharIndex}
         userInput={userInput}
       />
-      {results && <ResultsDisplay results={results} onTryAgain={resetTest} />}
+      {results && (
+        <ResultsDisplay
+          results={results}
+          onTryAgain={() => dispatch(resetTest())}
+        />
+      )}
     </div>
   );
 };

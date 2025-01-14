@@ -1,6 +1,7 @@
 import TypingTest from "./components/TypingTest";
 import ThemeToggle from "./components/ThemeToggle";
 import Footer from "./components/Footer";
+import ShortcutHint from "./components/ShortcutHint";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <ThemeToggle />
       </div>
       <TypingTest />
+      <ShortcutHint />
       <Footer />
     </div>
   );
