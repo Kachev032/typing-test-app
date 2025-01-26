@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   setUserInput,
@@ -8,6 +8,7 @@ import {
   setResults,
   resetTest,
   setTabPressed,
+  fetchNewText,
 } from "@/store/slices/typingSlice";
 import { calculateAccuracy, calculateWPM } from "@/utils/calculateMetrics";
 import TestDisplay from "./TestDisplay";
@@ -25,62 +26,77 @@ const TypingTest = () => {
     isTabPressed,
   } = useSelector((state) => state.typing);
 
-  const handleKeyDown = (e) => {
-    if (e.key === "Tab") {
-      e.preventDefault();
-      dispatch(setTabPressed(true));
-      return;
-    }
-
-    if (e.key === "Enter" && isTabPressed) {
-      e.preventDefault();
-      dispatch(resetTest());
-      return;
-    }
-
-    // Start timer on first keystroke
-    if (!startTime && e.key.length === 1) {
-      dispatch(setStartTime(Date.now()));
-    }
-
-    const currentTime = Date.now();
-    const lastTime = lastKeyTimes[e.key] || 0;
-
-    if (currentTime - lastTime < 50) {
-      e.preventDefault();
-      return;
-    }
-
-    dispatch(
-      updateLastKeyTimes({
-        key: e.key,
-        time: currentTime,
-      })
-    );
-
-    if (e.key === "Backspace") {
-      if (activeCharIndex > 0) {
-        dispatch(setUserInput(userInput.slice(0, -1)));
-        dispatch(setActiveCharIndex(activeCharIndex - 1));
+  const handleKeyDown = useCallback(
+    (e) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        dispatch(setTabPressed(true));
+        return;
       }
-      return;
-    }
 
-    if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
-      dispatch(setUserInput(userInput + e.key));
-      dispatch(setActiveCharIndex(activeCharIndex + 1));
-
-      if (activeCharIndex + 1 === currentText.length) {
-        completeTest();
+      if (e.key === "Enter" && isTabPressed) {
+        e.preventDefault();
+        dispatch(resetTest());
+        dispatch(fetchNewText());
+        return;
       }
-    }
-  };
 
-  const handleKeyUp = (e) => {
-    if (e.key === "Tab") {
-      dispatch(setTabPressed(false));
-    }
-  };
+      // Start timer on first keystroke
+      if (!startTime && e.key.length === 1) {
+        dispatch(setStartTime(Date.now()));
+      }
+
+      const currentTime = Date.now();
+      const lastTime = lastKeyTimes[e.key] || 0;
+
+      if (currentTime - lastTime < 50) {
+        e.preventDefault();
+        return;
+      }
+
+      dispatch(
+        updateLastKeyTimes({
+          key: e.key,
+          time: currentTime,
+        })
+      );
+
+      if (e.key === "Backspace") {
+        if (activeCharIndex > 0) {
+          dispatch(setUserInput(userInput.slice(0, -1)));
+          dispatch(setActiveCharIndex(activeCharIndex - 1));
+        }
+        return;
+      }
+
+      if (e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey) {
+        dispatch(setUserInput(userInput + e.key));
+        dispatch(setActiveCharIndex(activeCharIndex + 1));
+
+        if (activeCharIndex + 1 === currentText.length) {
+          completeTest();
+        }
+      }
+    },
+    [
+      dispatch,
+      startTime,
+      lastKeyTimes,
+      activeCharIndex,
+      userInput,
+      currentText,
+      isTabPressed,
+    ]
+  );
+
+  const handleKeyUp = useCallback(
+    (e) => {
+      if (e.key === "Tab") {
+        dispatch(setTabPressed(false));
+      }
+    },
+    [dispatch]
+  );
 
   const completeTest = () => {
     const endTime = Date.now();
@@ -95,21 +111,17 @@ const TypingTest = () => {
   };
 
   useEffect(() => {
+    dispatch(fetchNewText());
+  }, [dispatch]);
+
+  useEffect(() => {
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("keyup", handleKeyUp);
     };
-  }, [
-    startTime,
-    currentText,
-    activeCharIndex,
-    lastKeyTimes,
-    results,
-    userInput,
-    isTabPressed,
-  ]);
+  }, [handleKeyDown, handleKeyUp]);
 
   return (
     <div className="h-[calc(100vh-40px)] flex flex-col items-center justify-center p-4">

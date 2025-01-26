@@ -1,17 +1,26 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { getRandomText } from "@/utils/textGenerator";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { fetchRandomText } from "@/services/textService";
 import { calculateAccuracy, calculateWPM } from "@/utils/calculateMetrics";
+
+export const fetchNewText = createAsyncThunk(
+  "typing/fetchNewText",
+  async () => {
+    const text = await fetchRandomText();
+    return text || "Failed to load text. Press Tab + Enter to try again.";
+  }
+);
 
 const typingSlice = createSlice({
   name: "typing",
   initialState: {
-    currentText: getRandomText(),
+    currentText: "Loading...",
     userInput: "",
     startTime: null,
     results: null,
     activeCharIndex: 0,
     lastKeyTimes: {},
     isTabPressed: false,
+    status: "idle",
   },
   reducers: {
     setUserInput: (state, action) => {
@@ -33,7 +42,7 @@ const typingSlice = createSlice({
       state.results = action.payload;
     },
     resetTest: (state) => {
-      state.currentText = getRandomText();
+      state.currentText = "Loading...";
       state.userInput = "";
       state.startTime = null;
       state.results = null;
@@ -43,6 +52,22 @@ const typingSlice = createSlice({
     setTabPressed: (state, action) => {
       state.isTabPressed = action.payload;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchNewText.pending, (state) => {
+        state.status = "loading";
+        state.currentText = "Loading...";
+      })
+      .addCase(fetchNewText.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.currentText = action.payload;
+      })
+      .addCase(fetchNewText.rejected, (state) => {
+        state.status = "failed";
+        state.currentText =
+          "Failed to load text. Press Tab + Enter to try again.";
+      });
   },
 });
 

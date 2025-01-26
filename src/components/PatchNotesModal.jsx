@@ -28,6 +28,7 @@ const PatchNotesModal = () => {
           <div className="space-y-4">
             <div>
               <h3 className="font-medium mb-2">Version 0.0.1</h3>
+
               <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
                 <li>
                   Changed state managment to Redux Toolkit for better
@@ -36,6 +37,15 @@ const PatchNotesModal = () => {
                 <li>
                   Implemented a quick restart keyboard shortcut, so users can
                   quickly restart the test at anytime
+                </li>
+                <li>
+                  Implemented an API instead of using hardcoded data for the
+                  test
+                </li>
+                <li>Implemented Dark Mode as the default theme</li>
+                <li>
+                  Implemented a pulsating underscore for better visibility and
+                  trackability when typing
                 </li>
               </ul>
             </div>

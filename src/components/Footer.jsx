@@ -13,15 +13,6 @@ const Footer = () => {
         <div className="max-w-screen-xl mx-auto px-4 h-full">
           <div className="flex justify-between items-center h-full text-sm text-muted-foreground">
             <div className="flex items-center gap-4">
-              <button
-                onClick={() => dispatch(togglePatchNotes())}
-                className="hover:text-foreground cursor-pointer"
-              >
-                patch notes (v0.0.1)
-              </button>
-            </div>
-
-            <div className="flex items-center gap-4">
               <Button variant="ghost" size="icon" asChild>
                 <a
                   href="https://github.com/Kachev032/typing-test-app"
@@ -36,6 +27,15 @@ const Footer = () => {
                   <Mail className="w-5 h-5" />
                 </a>
               </Button>
+            </div>
+
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => dispatch(togglePatchNotes())}
+                className="hover:text-foreground cursor-pointer"
+              >
+                patch notes (v0.0.1)
+              </button>
             </div>
           </div>
         </div>

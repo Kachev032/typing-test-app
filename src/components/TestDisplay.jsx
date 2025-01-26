@@ -27,7 +27,7 @@ const TestDisplay = ({ text, activeCharIndex, userInput }) => {
                   {char === " " ? "\u00A0" : char}
                 </span>
                 {index === activeCharIndex && (
-                  <span className="absolute left-0 right-0 bottom-0 text-blue-600">
+                  <span className="absolute left-0 right-0 bottom-0 text-blue-600 caret-pulse">
                     _
                   </span>
                 )}
