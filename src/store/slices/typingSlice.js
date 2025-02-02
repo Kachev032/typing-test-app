@@ -10,6 +10,15 @@ export const fetchNewText = createAsyncThunk(
   }
 );
 
+export const resetAndFetchText = createAsyncThunk(
+  "typing/resetAndFetchText",
+  async (_, { dispatch }) => {
+    dispatch(resetTest());
+    const text = await fetchRandomText();
+    return text || "Failed to load text. Press Tab + Enter to try again.";
+  }
+);
+
 const typingSlice = createSlice({
   name: "typing",
   initialState: {
@@ -42,7 +51,6 @@ const typingSlice = createSlice({
       state.results = action.payload;
     },
     resetTest: (state) => {
-      state.currentText = "Loading...";
       state.userInput = "";
       state.startTime = null;
       state.results = null;
@@ -64,6 +72,19 @@ const typingSlice = createSlice({
         state.currentText = action.payload;
       })
       .addCase(fetchNewText.rejected, (state) => {
+        state.status = "failed";
+        state.currentText =
+          "Failed to load text. Press Tab + Enter to try again.";
+      })
+      .addCase(resetAndFetchText.pending, (state) => {
+        state.status = "loading";
+        state.currentText = "Loading...";
+      })
+      .addCase(resetAndFetchText.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.currentText = action.payload;
+      })
+      .addCase(resetAndFetchText.rejected, (state) => {
         state.status = "failed";
         state.currentText =
           "Failed to load text. Press Tab + Enter to try again.";

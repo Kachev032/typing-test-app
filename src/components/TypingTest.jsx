@@ -9,6 +9,7 @@ import {
   resetTest,
   setTabPressed,
   fetchNewText,
+  resetAndFetchText,
 } from "@/store/slices/typingSlice";
 import { calculateAccuracy, calculateWPM } from "@/utils/calculateMetrics";
 import TestDisplay from "./TestDisplay";
@@ -36,8 +37,7 @@ const TypingTest = () => {
 
       if (e.key === "Enter" && isTabPressed) {
         e.preventDefault();
-        dispatch(resetTest());
-        dispatch(fetchNewText());
+        dispatch(resetAndFetchText());
         return;
       }
 
@@ -130,12 +130,7 @@ const TypingTest = () => {
         activeCharIndex={activeCharIndex}
         userInput={userInput}
       />
-      {results && (
-        <ResultsDisplay
-          results={results}
-          onTryAgain={() => dispatch(resetTest())}
-        />
-      )}
+      {results && <ResultsDisplay results={results} />}
     </div>
   );
 };
