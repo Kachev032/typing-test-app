@@ -7,29 +7,41 @@ const ResultsDisplay = ({ results }) => {
   const dispatch = useDispatch();
 
   return (
-    <div className="mt-8 w-full max-w-[850px] px-8">
-      <h2 className="text-2xl font-bold mb-6 text-center">Results</h2>
-      <div className="grid grid-cols-3 gap-8 mb-8">
+    <div className="w-full max-w-[600px] mx-auto mt-8 sm:mt-16 px-4">
+      <div className="flex justify-center gap-8 sm:gap-16">
         <div className="flex flex-col items-center">
-          <p className="font-semibold text-lg mb-2">WPM</p>
-          <p className="text-3xl font-mono">{results.wpm}</p>
+          <p className="text-2xl sm:text-4xl font-mono mb-1 sm:mb-2">
+            {results.wpm}
+          </p>
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider text-muted-foreground">
+            wpm
+          </p>
         </div>
         <div className="flex flex-col items-center">
-          <p className="font-semibold text-lg mb-2">Accuracy</p>
-          <p className="text-3xl font-mono">{results.accuracy}%</p>
+          <p className="text-2xl sm:text-4xl font-mono mb-1 sm:mb-2">
+            {results.accuracy}%
+          </p>
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider text-muted-foreground">
+            accuracy
+          </p>
         </div>
         <div className="flex flex-col items-center">
-          <p className="font-semibold text-lg mb-2">Time</p>
-          <p className="text-3xl font-mono">{results.time}s</p>
+          <p className="text-2xl sm:text-4xl font-mono mb-1 sm:mb-2">
+            {results.time}s
+          </p>
+          <p className="text-[10px] sm:text-xs uppercase tracking-wider text-muted-foreground">
+            time
+          </p>
         </div>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center mt-8">
         <Button
           onClick={() => dispatch(resetAndFetchText())}
           variant="ghost"
-          size="icon"
+          size="sm"
+          className="text-muted-foreground hover:text-foreground"
         >
-          <RotateCcw className="w-6 h-6" />
+          <RotateCcw className="w-4 h-4" />
         </Button>
       </div>
     </div>

@@ -9,27 +9,44 @@ const PatchNotesModal = () => {
 
   if (!isOpen) return null;
 
+  const handleBackdropClick = () => {
+    dispatch(togglePatchNotes());
+  };
+
+  const handleModalClick = (e) => {
+    e.stopPropagation();
+  };
+
   return (
-    <div className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50">
-      <div className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 sm:rounded-lg">
-        <div className="flex flex-col space-y-1.5 text-center sm:text-left">
+    <div
+      className="fixed inset-0 bg-background/80 backdrop-blur-sm z-50"
+      onClick={handleBackdropClick}
+    >
+      <div
+        className="fixed left-[50%] top-[50%] z-50 grid w-[calc(100%-2rem)] sm:w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-3 sm:gap-4 border bg-background p-4 sm:p-6 shadow-lg duration-200 sm:rounded-lg"
+        onClick={handleModalClick}
+      >
+        <div className="flex flex-col space-y-1 sm:space-y-1.5 text-center sm:text-left">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Patch Notes</h2>
+            <h2 className="text-base sm:text-lg font-semibold">Patch Notes</h2>
             <Button
               variant="ghost"
               size="icon"
+              className="h-8 w-8 sm:h-10 sm:w-10"
               onClick={() => dispatch(togglePatchNotes())}
             >
               <X className="h-4 w-4" />
             </Button>
           </div>
         </div>
-        <div className="max-h-[60vh] overflow-y-auto">
-          <div className="space-y-4">
+        <div className="max-h-[50vh] sm:max-h-[60vh] overflow-y-auto">
+          <div className="space-y-3 sm:space-y-4">
             <div>
-              <h3 className="font-medium mb-2">Version 0.0.1</h3>
+              <h3 className="text-sm sm:text-base font-medium mb-2">
+                Version 0.0.1
+              </h3>
 
-              <ul className="list-disc list-inside space-y-2 text-sm text-muted-foreground">
+              <ul className="list-disc list-inside space-y-1.5 sm:space-y-2 text-xs sm:text-sm text-muted-foreground">
                 <li>
                   Changed state managment to Redux Toolkit for better
                   scalability
@@ -46,6 +63,14 @@ const PatchNotesModal = () => {
                 <li>
                   Implemented a pulsating underscore for better visibility and
                   trackability when typing
+                </li>
+                <li>
+                  Implemented a "report a bug" button to easily report any
+                  issues on GitHub
+                </li>
+                <li>
+                  Implemented a fix for words that got partially carried over to
+                  the next line
                 </li>
               </ul>
             </div>

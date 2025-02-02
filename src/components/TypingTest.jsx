@@ -124,7 +124,7 @@ const TypingTest = () => {
   }, [handleKeyDown, handleKeyUp]);
 
   return (
-    <div className="h-[calc(100vh-40px)] flex flex-col items-center justify-center p-4">
+    <div className="w-full flex flex-col items-center justify-center py-8">
       <TestDisplay
         text={currentText}
         activeCharIndex={activeCharIndex}
